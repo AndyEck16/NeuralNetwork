@@ -7,7 +7,7 @@
 NeuralNetwork::NeuralNetwork()
 {
 	REGULARIZATION_WEIGHT = 0.001;
-	LEARNING_STEP_SIZE = 0.001;
+	LEARNING_STEP_SIZE = 0.01;
 }
 
 NeuralNetwork::~NeuralNetwork()
