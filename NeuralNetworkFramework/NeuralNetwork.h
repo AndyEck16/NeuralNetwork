@@ -45,7 +45,6 @@ private:
 	void LearnFromSingleInputOutputVectorPair(std::vector<double> &inputVector, std::vector<double> &outputVector);
 	std::vector<NeuralLayer*> layers;	
 	std::vector<double> GetErrorVectorFromInputOutputPair(std::vector<double> &inputVector, std::vector<double> &outputVector);	
-	std::vector<std::vector<std::vector<double>>> getWeightsErrorGradient(std::vector<double> &inputVector, std::vector<double> &outputVector);
 
 	
 	
