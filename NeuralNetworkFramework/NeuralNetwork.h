@@ -32,6 +32,8 @@ public:
 		std::function<double(double)> const &derivOfActivFunc );
 
 	void TrainNetwork(std::string trainingDataFilename, int dimensionalityOfInputVector, int dimensionalityOfOutputVector); //Read in a csv file of training vectors and train the neural network off them
+	void LearnFromSingleInputOutputVectorPair(std::vector<double> &inputVector, std::vector<double> &outputVector);
+
 	std::vector<double> TestNetwork(std::string trainingDataFilename, int dimensionalityOfInputVector, int dimensionalityOfOutputVector); //Read in a csv file of test vectors and test the NN's predictions against them. Returns fraction of successful predictions for each output node.
 
 	std::vector<double> GetNetworkOutputFromInputVector(std::vector<double> &inputVector);
@@ -42,7 +44,7 @@ private:
 	
 	void FeedForwardFromInputVector(std::vector<double> &inputVector);
 	std::vector<double> GetCurrentOutputVector();
-	void LearnFromSingleInputOutputVectorPair(std::vector<double> &inputVector, std::vector<double> &outputVector);
+	
 	std::vector<NeuralLayer*> layers;	
 	std::vector<double> GetErrorVectorFromInputOutputPair(std::vector<double> &inputVector, std::vector<double> &outputVector);	
 
