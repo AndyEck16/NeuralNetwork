@@ -17,6 +17,9 @@ NeuralNode::~NeuralNode() {
 
 void NeuralNode::InitializeWeightVector(int sizeOfWeightVector) {
 	weightsFromPreviousLayer = std::vector<double>(sizeOfWeightVector);
+	for (int i = 0; i < sizeOfWeightVector; i++) {
+		weightsFromPreviousLayer[i] = NNUtilityFunctions::GetNormalDistRand();
+	}
 }
 
 void NeuralNode::ThrowNodeWeightSizeMismatchError() {

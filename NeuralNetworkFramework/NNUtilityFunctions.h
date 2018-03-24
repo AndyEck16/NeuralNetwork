@@ -2,6 +2,8 @@
 #define NN_UTILITY_FUNCTIONS_H
 
 #include <vector>
+#include <random>
+#include <chrono>
 
 namespace NNUtilityFunctions {
 
@@ -66,6 +68,26 @@ namespace NNUtilityFunctions {
 		std::vector<double> outputVector(outputVectorStart, outputVectorEnd);
 		return outputVector;
 	}
+
+	static bool RngWasInitialized = false;
+	static std::default_random_engine randNumGenerator; //random number generator for initializing weights at nodes
+	static std::normal_distribution<double> normalDist;
+
+	static void InitializeRng() {
+		unsigned long seed = std::chrono::system_clock::now().time_since_epoch().count();
+		randNumGenerator = std::default_random_engine(seed);
+		normalDist = std::normal_distribution<double>(0.0, 1.0);
+	}
+
+	static double GetNormalDistRand() {
+		if (!RngWasInitialized) {
+			InitializeRng();
+			RngWasInitialized = true;
+		}
+
+		return normalDist(randNumGenerator);
+	}
+	
 
 }
 
