@@ -11,38 +11,40 @@ class NeuralNetwork;
 class NeuralNode;
 
 class NeuralLayer {
-	NeuralLayer* prevLayer = NULL;
-	NeuralLayer* nextLayer = NULL;
-	void ResetNodeWeightVectors();
+	friend NeuralNetwork;	
 
 public:
-	//Constructors / Destructor
+	
 	NeuralLayer();
 	NeuralLayer(int numNodesInLayer,
 		std::function<double(double)> const& activationFunctionForNodes = NNUtilityFunctions::linearFunc,
 		std::function<double(double)> const& derivOfActivationFunctionForNodes = NNUtilityFunctions::linearFunc_deriv);
-	~NeuralLayer();
+	~NeuralLayer();	
 
-	int id; //Give layer an id
+	int id;
+
+	int NumNodes();
+	int NumNodesInPrevLayer();
+	std::vector<double> GetNodeValues();
+	std::vector<double> GetPrevLayerNodeValues();
+	void SetLayerActivationFunctions(
+		std::function<double(double)> const &activFunc,
+		std::function<double(double)> const &derivOfActivFunc);
+
+private:
+	NeuralLayer * prevLayer = NULL;
+	NeuralLayer* nextLayer = NULL;
+	std::vector<NeuralNode*> nodes;
 	NeuralNetwork* parentNetwork;
 
-	//Get / Set neighboring layers
 	void SetPrevLayer(NeuralLayer* newPrevLayer);
 	void SetNextLayer(NeuralLayer* newNextLayer);
-	NeuralLayer* GetPrevLayer();
-	NeuralLayer* GetNextLayer();
-	//void ResetNodeWeights();
-
-	//Get nodes in current layer
-	std::vector<NeuralNode*> nodes;
-	int NumNodes();
-	std::vector<double> GetNodeValues();
+	void ResetNodeWeightVectors();
 	void FeedForward();
 	void SetNodeValues(std::vector<double> &newNodeValues);
-
 	std::vector<double> LearnWeightsFromErrorVector(std::vector<double> &errorVector);
-
-	
 };
+
+
 
 #endif

@@ -14,29 +14,27 @@ NeuralLayer::NeuralLayer(int numNodesInLayer, std::function<double(double)> cons
 	}
 }
 
-
 NeuralLayer::~NeuralLayer() {
 	for (std::vector<NeuralNode*>::iterator nodeIter = nodes.begin(); nodeIter != nodes.end(); ++nodeIter) {
 		delete *nodeIter;
 	}
 }
 
-NeuralLayer* NeuralLayer::GetNextLayer() {
-	return nextLayer;
+int NeuralLayer::NumNodes() {
+	return nodes.size();
 }
 
-NeuralLayer* NeuralLayer::GetPrevLayer() {
-	return prevLayer;
+int NeuralLayer::NumNodesInPrevLayer() {
+	if (prevLayer)
+		return prevLayer->NumNodes();
+	else
+		return 0;
 }
 
 void NeuralLayer::SetNextLayer(NeuralLayer* newNextLayer) {
 	if (newNextLayer != nextLayer) {
 		nextLayer = newNextLayer;
 	}
-}
-
-int NeuralLayer::NumNodes() {
-	return nodes.size();
 }
 
 void NeuralLayer::SetPrevLayer(NeuralLayer* newPrevLayer) {
@@ -48,7 +46,7 @@ void NeuralLayer::SetPrevLayer(NeuralLayer* newPrevLayer) {
 
 void NeuralLayer::ResetNodeWeightVectors() {
 	if (prevLayer) {
-		for (int nodeIdx = 0; nodeIdx < nodes.size(); nodeIdx++) {
+		for (int nodeIdx = 0; nodeIdx < NumNodes(); nodeIdx++) {
 			nodes[nodeIdx]->InitializeWeightVector(prevLayer->NumNodes());
 		}
 	}
@@ -64,23 +62,45 @@ void NeuralLayer::FeedForward() {
 	}
 }
 
-
 std::vector<double> NeuralLayer::GetNodeValues() {
 	std::vector<double> nodeValueVector(nodes.size());
-	for (int i = 0; i < nodes.size(); i++) {
+	for (int i = 0; i < NumNodes(); i++) {
 		nodeValueVector[i] = nodes[i]->value;
 	}
+	return nodeValueVector;
+}
 
+std::vector<double> NeuralLayer::GetPrevLayerNodeValues() {
+	std::vector<double> nodeValueVector;
+	if (prevLayer) {
+		nodeValueVector = std::vector<double>(NumNodesInPrevLayer());
+		for (int i = 0; i < NumNodesInPrevLayer(); i++) {
+			nodeValueVector[i] = prevLayer->nodes[i]->value;
+		}
+	}
 	return nodeValueVector;
 }
 
 void NeuralLayer::SetNodeValues(std::vector<double> &newNodeValues) {
-	for (int nodeIdx = 0; nodeIdx < newNodeValues.size(); nodeIdx++) {
+	if (newNodeValues.size() != NumNodes()) throw std::exception("ERROR: Size of new node values vector must match current size of neural layer");
+	
+	for (int nodeIdx = 0; nodeIdx < NumNodes(); nodeIdx++) {
 		nodes[nodeIdx]->value = newNodeValues[nodeIdx];
 	}
 }
 
+void NeuralLayer::SetLayerActivationFunctions(
+		std::function<double(double)> const &activFunc,
+		std::function<double(double)> const &derivOfActivFunc) 
+{
+	for (NeuralNode* theNode : nodes) {
+		theNode->activationFunction = activFunc;
+		theNode->derivOfActivationFunction = derivOfActivFunc;
+	}
+}
+
 std::vector<double> NeuralLayer::LearnWeightsFromErrorVector(std::vector<double> &errorVector) {
+	if (errorVector.size() != NumNodes()) throw std::exception("ERROR: errorVector is not same size as # of nodes in layer");
 	double learningStepSize = parentNetwork->LEARNING_STEP_SIZE;
 	double regularizationWeight = parentNetwork->REGULARIZATION_WEIGHT;
 	
@@ -90,7 +110,7 @@ std::vector<double> NeuralLayer::LearnWeightsFromErrorVector(std::vector<double>
 		std::vector<double> prevLayerNodeValues = prevLayer->GetNodeValues();
 		backPropogatedErrorVector = std::vector<double>(prevLayer->NumNodes());
 
-		for (int i = 0; i < errorVector.size(); i++) {
+		for (int i = 0; i < NumNodes(); i++) {
 			NeuralNode * const currentNode = nodes[i];
 
 			double innerProductAtNode = currentNode->DotProductOfWeightsAndPreviousLayerNodeValues();
@@ -112,6 +132,4 @@ std::vector<double> NeuralLayer::LearnWeightsFromErrorVector(std::vector<double>
 		}
 	}
 	return backPropogatedErrorVector;
-
-
 }

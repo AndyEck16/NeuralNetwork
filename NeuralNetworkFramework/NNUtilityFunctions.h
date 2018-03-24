@@ -34,7 +34,7 @@ namespace NNUtilityFunctions {
 		return (1 - expOfMinusDotProd) / (1 + expOfMinusDotProd);
 	}
 
-	static double binaryClassifierActivFunc_prime(double inDotProd) {
+	static double binaryClassifierActivFunc_deriv(double inDotProd) {
 		//Derivative of the activation function applied at each output node, specialized for binary classification
 		//This function is specialized for binary classification. It tends to input +/- 1, and REQUIRES TRAINING DATA WHERE THE OUTPUT IS ALWAYS +/-1, otherwise the NN will not predict correctly
 		double expOfMinusDotProd = exp(-inDotProd);
@@ -47,7 +47,7 @@ namespace NNUtilityFunctions {
 		if (vec1.size() != vec2.size()) throw std::invalid_argument("ERROR: input vector and weights must be same length");
 
 		double dotProd = 0;
-		for (int i = 0; i < vec1.size(); i++) dotProd += vec1[i] * vec2[i];
+		for (int i = 0; i < (int)(vec1.size()); i++) dotProd += vec1[i] * vec2[i];
 
 		return dotProd;
 

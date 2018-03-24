@@ -9,33 +9,32 @@
 class NeuralLayer;
 
 class NeuralNode {
-private:
+	friend NeuralLayer;
 
 public:
 	NeuralNode();
 	NeuralNode(std::function<double(double)> const& activationFunction,
 		std::function<double(double)> const& derivOfActivationFunction);
-	~NeuralNode();
+	~NeuralNode();	
+	int id; //Give node an id	
 
+	double value;
+
+	void InitializeWeightVector(int sizeOfWeightVector);
+	void UpdateValueFromPrevLayer();	
+
+private:
 	std::function<double(double)> activationFunction;
 	std::function<double(double)> derivOfActivationFunction;
 
 	NeuralLayer* parentLayer;
 
-	double value;
-	int id; //Give node an id
-
 	std::vector<double> weightsFromPreviousLayer;
 	double bias;
 
-	void InitializeWeightVector(int sizeOfWeightVector);
 	double DotProductOfWeightsAndPreviousLayerNodeValues();
-
-	void UpdateValueFromPrevLayer();
-	
-
-	//Error handling functions
 	void ThrowNodeWeightSizeMismatchError();
+	
 };
 
 #endif
