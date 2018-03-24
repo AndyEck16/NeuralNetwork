@@ -32,7 +32,8 @@ namespace CSVReader {
 				strVector.push_back("");
 			}
 		}
-		catch (std::exception &e) {
+		catch (std::exception &e) {	
+			auto errorString = e.what();
 			return false;
 		}
 
@@ -45,7 +46,7 @@ namespace CSVReader {
 		std::vector<std::string> strVector;
 		bool success = ReadLineIntoStringVector(str, strVector);
 		if (success) {
-			for (int i = 0; i < strVector.size(); i++) {
+			for (int i = 0; i < (int)(strVector.size()); i++) {
 				try {
 					intVector.push_back(std::stoi(strVector[i]));
 				}
@@ -64,7 +65,7 @@ namespace CSVReader {
 		std::vector<std::string> strVector;
 		bool success = ReadLineIntoStringVector(str, strVector);
 		if (success) {
-			for (int i = 0; i < strVector.size(); i++) {
+			for (int i = 0; i < (int)(strVector.size()); i++) {
 				try {
 					dblVector.push_back(std::stod(strVector[i]));
 				}
