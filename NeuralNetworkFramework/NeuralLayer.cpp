@@ -114,20 +114,21 @@ std::vector<double> NeuralLayer::LearnWeightsFromErrorVector(std::vector<double>
 			NeuralNode * const currentNode = nodes[i];
 
 			double innerProductAtNode = currentNode->DotProductOfWeightsAndPreviousLayerNodeValues();
-			double currentNodeErrorTerm = -2 * errorVector[i] * currentNode->derivOfActivationFunction(innerProductAtNode);			
+			double currentNodeErrorGradientTerm;
+			currentNodeErrorGradientTerm = 2 * errorVector[i] * currentNode->derivOfActivationFunction(innerProductAtNode);		
 
 			//Alter each value in the weight vector at the current node using the error term and the regularization cost
 			int prevLayerSize = prevLayer->NumNodes();
 			for (int prevLayerNode = 0; prevLayerNode < prevLayerSize; prevLayerNode++) {
-				backPropogatedErrorVector[prevLayerNode] += currentNodeErrorTerm * currentNode->weightsFromPreviousLayer[prevLayerNode];
+				backPropogatedErrorVector[prevLayerNode] += (1.0 / 2.0) * currentNodeErrorGradientTerm * currentNode->weightsFromPreviousLayer[prevLayerNode];
 
-				double gradientTerm = currentNodeErrorTerm * prevLayerNodeValues[prevLayerNode] 
+				double gradientTerm = currentNodeErrorGradientTerm * prevLayerNodeValues[prevLayerNode]
 										+ regularizationWeight * currentNode->weightsFromPreviousLayer[prevLayerNode];
 				currentNode->weightsFromPreviousLayer[prevLayerNode] = currentNode->weightsFromPreviousLayer[prevLayerNode] 
 																		- learningStepSize * gradientTerm;				
 			}
 			//Alter bias using error term and regularization cost
-			double gradientTerm = currentNodeErrorTerm + regularizationWeight * currentNode->bias;
+			double gradientTerm = currentNodeErrorGradientTerm + regularizationWeight * currentNode->bias;
 			currentNode->bias = currentNode->bias - learningStepSize * gradientTerm;
 		}
 	}

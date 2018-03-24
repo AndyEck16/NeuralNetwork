@@ -171,7 +171,7 @@ std::vector<double> NeuralNetwork::GetErrorVectorFromInputOutputPair(std::vector
 	std::vector<double> errorVector(trainingOutputVector.size());
 
 	for (int outputNode = 0; outputNode < (int)(trainingOutputVector.size()); outputNode++) {
-		errorVector[outputNode] =trainingOutputVector[outputNode] - y_predicted[outputNode];
+		errorVector[outputNode] = y_predicted[outputNode] - trainingOutputVector[outputNode];
 	}
 
 	return errorVector;
