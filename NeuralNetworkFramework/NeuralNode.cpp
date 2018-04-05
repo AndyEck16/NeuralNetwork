@@ -38,9 +38,11 @@ double NeuralNode::DotProductOfWeightsAndPreviousLayerNodeValues() {
 		ThrowNodeWeightSizeMismatchError();
 	}
 
-	//Compute dot product of current node values and weights in this layer	
-	dotProd = NNUtilityFunctions::innerProduct(parentLayer->GetPrevLayerNodeValues(), weightsFromPreviousLayer);
-	dotProd += bias; //Add node's bias to dot product before inputting into activation function.
+	//Compute dot product of current node values from previous layer and weights at this node
+	NeuralLayer const * const prevLayer = parentLayer->GetPrevLayer();
+	dotProd = prevLayer->DotProductWithWeightVector(weightsFromPreviousLayer);
+
+	dotProd += bias;
 
 	return dotProd;
 }

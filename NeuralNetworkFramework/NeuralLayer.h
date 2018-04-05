@@ -23,17 +23,21 @@ public:
 
 	int id;
 
-	int NumNodes();
+	int NumNodes() const;
 	int NumNodesInPrevLayer();
+
+	NeuralLayer const * const GetPrevLayer();
 	std::vector<double> GetNodeValues();
 	std::vector<double> GetPrevLayerNodeValues();
 	void SetLayerActivationFunctions(
 		std::function<double(double)> const &activFunc,
 		std::function<double(double)> const &derivOfActivFunc);
 
+	double DotProductWithWeightVector(std::vector<double> const &weightVector) const;
+
 private:
 	NeuralLayer * prevLayer = NULL;
-	NeuralLayer* nextLayer = NULL;
+	NeuralLayer * nextLayer = NULL;
 	std::vector<NeuralNode*> nodes;
 	NeuralNetwork* parentNetwork;
 

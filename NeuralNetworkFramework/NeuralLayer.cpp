@@ -20,7 +20,7 @@ NeuralLayer::~NeuralLayer() {
 	}
 }
 
-int NeuralLayer::NumNodes() {
+int NeuralLayer::NumNodes() const{
 	return nodes.size();
 }
 
@@ -81,6 +81,11 @@ std::vector<double> NeuralLayer::GetPrevLayerNodeValues() {
 	return nodeValueVector;
 }
 
+NeuralLayer const* const NeuralLayer::GetPrevLayer() {
+	NeuralLayer const * const returnPrevLayer = prevLayer;
+	return returnPrevLayer;
+}
+
 void NeuralLayer::SetNodeValues(std::vector<double> &newNodeValues) {
 	if (newNodeValues.size() != NumNodes()) throw std::exception("ERROR: Size of new node values vector must match current size of neural layer");
 	
@@ -133,4 +138,13 @@ std::vector<double> NeuralLayer::LearnWeightsFromErrorVector(std::vector<double>
 		}
 	}
 	return backPropogatedErrorVector;
+}
+
+double NeuralLayer::DotProductWithWeightVector(std::vector<double> const &weightVector) const {
+	if (weightVector.size() != NumNodes()) throw std::exception("ERROR: weightVector is not same size as # of nodes in layer");
+	double dotProd = 0;
+	for (int i = 0; i < NumNodes(); i++) {
+		dotProd += weightVector[i] * nodes[i]->value;
+	}
+	return dotProd;
 }

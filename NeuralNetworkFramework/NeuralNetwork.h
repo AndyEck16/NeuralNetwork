@@ -16,8 +16,8 @@ public:
 	NeuralNetwork();
 	~NeuralNetwork();
 	
-	double REGULARIZATION_WEIGHT;
-	double LEARNING_STEP_SIZE;
+	double REGULARIZATION_WEIGHT = .001;
+	double LEARNING_STEP_SIZE = .001;
 
 	void Initialize(std::vector<int> &inNodesPerLayer); //Setup and initialize a NN with the specified nodes per layer
 
