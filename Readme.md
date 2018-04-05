@@ -48,7 +48,7 @@ After training with *nandData.csv*, these settings should get perfect prediction
   * The public members / methods in this class should be enough for full use of the NN.
   * Private access to a vector of NeuralLayers that make up the network
   #### *NeuralLayer (class)*
-  * Each instance of NeuralLayer contains a vector of Neural Nodes
+  * Private access to a vector of NeuralNodes that make up the layer
   * Feedforward and backpropogation algorithms for prediction and learning from training data
   * Getters and Setters for node values
   * Pointers to neighboring NeuralLayers
