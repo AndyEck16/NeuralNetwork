@@ -6,6 +6,8 @@
   * Set activation functions at the nodes in the network. (Output layer nodes may have different activation functions than hidden layer nodes.)
   * Train a constructed network from a data file
   * Test a trained network against a data file
+ 
+ Note: "main" function is in file NeuralNetworkFramework/NeuralNetworkFramework.cpp
   
 ## Testing and Verification 
   
