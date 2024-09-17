@@ -64,3 +64,4 @@ After training with *nandData.csv*, these settings should get perfect prediction
   * *nandData.csv* contains 80,000 data vectors
   * *nandTestData.csv* contains 20,000 data vectors.
   
+I've tested trying to mirror this repo on WheelockLab
